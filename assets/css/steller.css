@@ -600,8 +600,8 @@ pre code {
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
+  margin-right: 48px;
+  margin-left: 48px;
 }
 
 .no-gutters {
@@ -11645,3 +11645,5 @@ pre {
 .section.bg-gray {
   background: white;
 }
+
+
