@@ -47,6 +47,19 @@
     height: calc(80vh - 60px) /* Ajuste a altura do modal para não sobrepor a barra de título */
 }
 
+.carousel-item video {
+    z-index: 1050; /* Garante que o vídeo fique acima */
+    position: relative;
+    max-height: 80vh;
+    width: 100%;
+    object-fit: contain;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    z-index: 1049; /* Mantém os botões abaixo do vídeo */
+}
+
 </style>
 
 <head>
@@ -261,7 +274,7 @@
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="img-wrapper" onclick="openModal('Runmaps', ['assets/imgs/runmaps-capa.png'], 'O Runmaps é um projeto de mapeamento de rotas com informações detalhadas para corredores, incluindo segurança, iluminação e tráfego.', ['React', 'Node.js', 'MapBox'])">
+                        <div class="img-wrapper" onclick="openModal('Runmaps', ['assets/imgs/runmaps-capa.png'], 'O Runmaps é um projeto de mapeamento de rotas com informações detalhadas para corredores, incluindo segurança, iluminação e tráfego.', ['React', 'Node.js', 'MapBox'], 'assets/demos/demo_runmaps.mp4')">
                             <img src="assets/imgs/runmaps-capa.png" alt="Runmaps">
                             <div class="overlay">
                                 <div class="overlay-infos">
@@ -271,7 +284,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="img-wrapper" onclick="openModal('Lagoinha Totem', ['assets/imgs/lagoinha-capa.png'], 'O Lagoinha Totem é um sistema interativo desenvolvido para fornecer informações sobre uma empresa via tela touch.', ['HTML', 'CSS', 'JavaScript', 'ElectronJS'])">
+                        <div class="img-wrapper" onclick="openModal('Lagoinha Totem', ['assets/imgs/lagoinha-capa.png'], 'O Lagoinha Totem é um sistema interativo desenvolvido para fornecer informações sobre uma empresa via tela touch.', ['HTML', 'CSS', 'JavaScript', 'ElectronJS'], 'assets/demos/lagoinha_demo.mp4')">
                             <img src="assets/imgs/lagoinha-capa.png" alt="Lagoinha Totem">
                             <div class="overlay">
                                 <div class="overlay-infos">
@@ -283,7 +296,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="img-wrapper" onclick="openModal('Zapisp Dados', ['assets/imgs/projeto-2.jpg'], 'Zapisp Dados é uma ferramenta para exportação e análise de dados de clientes de forma eficiente.', ['Python', 'Pandas', 'SQL', 'N8N'])">
+                        <div class="img-wrapper" onclick="openModal('Zapisp Dados', ['assets/imgs/projeto-2.jpg'], 'Zapisp Dados é uma ferramenta para exportação e análise de dados de clientes de forma eficiente.', ['Python', 'Pandas', 'SQL', 'N8N'], 'assets/demos/demo_zapisp_dados.mp4')">
                             <img src="assets/imgs/projeto-2.jpg" alt="Zapisp Dados">
                             <div class="overlay">
                                 <div class="overlay-infos">
@@ -293,7 +306,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="img-wrapper" onclick="openModal('Alpla', ['assets/imgs/alpla-capa.png'], 'Alpla é um projeto acadêmico voltado para a engenharia biomédica com foco na sustentabilidade.', ['Python', 'Visão Computacional', 'OpenCV'])">
+                        <div class="img-wrapper" onclick="openModal('Alpla', ['assets/imgs/alpla-capa.png'], 'Alpla é um projeto acadêmico voltado para a engenharia biomédica com foco em auxiliar profissionais fisioterapeutas a analisar a altura plantar dos pés.', ['Python', 'Visão Computacional', 'OpenCV'])">
                             <img src="assets/imgs/alpla-capa.png" alt="Alpla">
                             <div class="overlay">
                                 <div class="overlay-infos">
@@ -310,8 +323,8 @@
     </section>
     <!-- End of portfolio section -->
 <!-- Modal -->
-<div id="projectModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg modal-fullscreen" role="document"> <!-- Modifiquei para modal-lg e adicionei modal-fullscreen -->
+<div id="projectModal" class="modal fade fullscreen-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle"></h5>
@@ -320,6 +333,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <!-- Carrossel apenas para imagens -->
                 <div id="modalCarousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner" id="modalContent"></div>
                     <a class="carousel-control-prev" href="#modalCarousel" role="button" data-slide="prev">
@@ -331,8 +345,20 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
+
+                <!-- Descrição -->
                 <p id="modalDescription" class="mt-3"></p>
-                <div id="modalTechnologies" class="mt-3"></div> <!-- Seção para tecnologias -->
+
+                <!-- Tecnologias -->
+                <div id="modalTechnologies" class="mt-2"></div>
+
+                <!-- Seção Demo (vídeo) -->
+                <div id="modalDemo" class="mt-4" style="display: none;">
+                    <h5>Demo</h5>
+                    <video id="demoVideo" class="d-block w-100" controls>
+                        Seu navegador não suporta vídeos.
+                    </video>
+                </div>
             </div>
         </div>
     </div>
@@ -553,29 +579,36 @@
         document.getElementById(id).style.display = "none";
     }
 
-    function openModal(title, media, description, technologies) {
+    function openModal(title, media, description, technologies, video = null) {
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalDescription').innerText = description;
+
     let modalContent = document.getElementById('modalContent');
     let modalTechnologies = document.getElementById('modalTechnologies');
-    
-    modalContent.innerHTML = '';
-    modalTechnologies.innerHTML = ''; 
+    let modalDemo = document.getElementById('modalDemo');
+    let demoVideo = document.getElementById('demoVideo');
 
+    modalContent.innerHTML = '';
+    modalTechnologies.innerHTML = '';
+    modalDemo.style.display = 'none'; // Esconder a seção Demo por padrão
+
+    // Adiciona tecnologias como tags
     technologies.forEach(tech => {
         modalTechnologies.innerHTML += `<span class="badge badge-pill badge-info">${tech}</span> `;
     });
 
-    media.forEach((item, index) => {
+    // Adiciona imagens ao carrossel
+    media.forEach((img, index) => {
         let activeClass = index === 0 ? 'active' : '';
-        let mediaTag;
-        if (item.endsWith('.mp4') || item.endsWith('.webm') || item.endsWith('.ogg')) {
-            mediaTag = `<video class="d-block w-100" controls><source src="${item}" type="video/mp4">Seu navegador não suporta vídeos.</video>`;
-        } else {
-            mediaTag = `<img src="${item}" class="d-block w-100" alt="${title}">`;
-        }
-        modalContent.innerHTML += `<div class="carousel-item ${activeClass}">${mediaTag}</div>`;
+        modalContent.innerHTML += `<div class="carousel-item ${activeClass}"><img src="${img}" class="d-block w-100" alt="${title}"></div>`;
     });
+
+    // Se houver vídeo, exibe na seção "Demo"
+    if (video) {
+        modalDemo.style.display = 'block';
+        demoVideo.innerHTML = `<source src="${video}" type="video/mp4">`;
+        demoVideo.load();
+    }
 
     $('#projectModal').modal('show');
 }
