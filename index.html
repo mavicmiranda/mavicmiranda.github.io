@@ -21,7 +21,7 @@
         padding: 20px;
         border-radius: 8px;
         width: 80%;
-        max-width: 400px;
+        max-width: 800px;
         text-align: center;
         position: relative;
     }
@@ -33,6 +33,20 @@
         font-size: 24px;
         cursor: pointer;
     }
+
+    .modal-fullscreen {
+    max-width: 100%;
+    width: 100%;
+    height: 400px;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-body {
+    overflow-y: auto;
+    height: calc(80vh - 60px) /* Ajuste a altura do modal para não sobrepor a barra de título */
+}
+
 </style>
 
 <head>
@@ -245,57 +259,87 @@
             <p class="mb-5 pb-4">Explore os projetos que desenvolvi e veja como posso contribuir para o seu próximo
                 desafio</p>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="img-wrapper">
-                        <img src="assets/imgs/runmaps-capa.png" alt="">
-                        <div class="overlay">
-                            <div class="overlay-infos">
-                                <h5>Runmaps</h5>
-                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
-                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="img-wrapper" onclick="openModal('Runmaps', ['assets/imgs/runmaps-capa.png'], 'O Runmaps é um projeto de mapeamento de rotas com informações detalhadas para corredores, incluindo segurança, iluminação e tráfego.', ['React', 'Node.js', 'Google Maps API'])">
+                            <img src="assets/imgs/runmaps-capa.png" alt="Runmaps">
+                            <div class="overlay">
+                                <div class="overlay-infos">
+                                    <h5>Runmaps</h5>
+                                    <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                    <a href="https://runmaps.com.br/"><i class="ti-link"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="img-wrapper" onclick="openModal('Lagoinha Totem', ['assets/imgs/lagoinha-capa.png'], 'O Lagoinha Totem é um sistema interativo desenvolvido para fornecer informações sobre uma empresa via tela touch.', ['HTML', 'CSS', 'JavaScript', 'PHP'])">
+                            <img src="assets/imgs/lagoinha-capa.png" alt="Lagoinha Totem">
+                            <div class="overlay">
+                                <div class="overlay-infos">
+                                    <h5>Lagoinha Totem</h5>
+                                    <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                    <a href="https://github.com/mavicmiranda/totemlagoinha"><i class="ti-link"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="img-wrapper">
-                        <img src="assets/imgs/lagoinha-capa.png" alt="">
-                        <div class="overlay">
-                            <div class="overlay-infos">
-                                <h5>Lagoinha Totem</h5>
-                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
-                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
+                    <div class="col-sm-6">
+                        <div class="img-wrapper" onclick="openModal('Zapisp Dados', ['assets/imgs/projeto-2.jpg'], 'Zapisp Dados é uma ferramenta para exportação e análise de dados de clientes de forma eficiente.', ['Python', 'Pandas', 'SQL'])">
+                            <img src="assets/imgs/projeto-2.jpg" alt="Zapisp Dados">
+                            <div class="overlay">
+                                <div class="overlay-infos">
+                                    <h5>Zapisp Dados</h5>
+                                    <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                    <a href="https://github.com/mavicmiranda/exportar-dados-CS"><i class="ti-link"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="img-wrapper" onclick="openModal('Alpla', ['assets/imgs/alpla-capa.png'], 'Alpla é um projeto acadêmico voltado para a engenharia biomédica com foco na sustentabilidade.', ['React', 'Node.js', 'MongoDB'])">
+                            <img src="assets/imgs/alpla-capa.png" alt="Alpla">
+                            <div class="overlay">
+                                <div class="overlay-infos">
+                                    <h5>Alpla</h5>
+                                    <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
+                                    <a href="https://github.com/mavicmiranda/engbio-tcc-2023"><i class="ti-link"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <div class="col-sm-6">
-                    <div class="img-wrapper">
-                        <img src="assets/imgs/projeto-2.jpg" alt="">
-                        <div class="overlay">
-                            <div class="overlay-infos">
-                                <h5>Zapisp Dados</h5>
-                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
-                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="img-wrapper">
-                        <img src="assets/imgs/alpla-capa.png" alt="">
-                        <div class="overlay">
-                            <div class="overlay-infos">
-                                <h5>Project Title</h5>
-                                <a href="javascript:void(0)"><i class="ti-zoom-in"></i></a>
-                                <a href="javascript:void(0)"><i class="ti-link"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </section>
     <!-- End of portfolio section -->
+<!-- Modal -->
+<div id="projectModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg modal-fullscreen" role="document"> <!-- Modifiquei para modal-lg e adicionei modal-fullscreen -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modalCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner" id="modalContent"></div>
+                    <a class="carousel-control-prev" href="#modalCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#modalCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                <p id="modalDescription" class="mt-3"></p>
+                <div id="modalTechnologies" class="mt-3"></div> <!-- Seção para tecnologias -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
     <!-- Testmonial Section -->
     <section id="testmonial" class="section">
@@ -508,4 +552,31 @@
     function fecharModal(id) {
         document.getElementById(id).style.display = "none";
     }
+
+    function openModal(title, media, description, technologies) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalDescription').innerText = description;
+    let modalContent = document.getElementById('modalContent');
+    let modalTechnologies = document.getElementById('modalTechnologies');
+    
+    modalContent.innerHTML = '';
+    modalTechnologies.innerHTML = ''; 
+
+    technologies.forEach(tech => {
+        modalTechnologies.innerHTML += `<span class="badge badge-pill badge-info">${tech}</span> `;
+    });
+
+    media.forEach((item, index) => {
+        let activeClass = index === 0 ? 'active' : '';
+        let mediaTag;
+        if (item.endsWith('.mp4') || item.endsWith('.webm') || item.endsWith('.ogg')) {
+            mediaTag = `<video class="d-block w-100" controls><source src="${item}" type="video/mp4">Seu navegador não suporta vídeos.</video>`;
+        } else {
+            mediaTag = `<img src="${item}" class="d-block w-100" alt="${title}">`;
+        }
+        modalContent.innerHTML += `<div class="carousel-item ${activeClass}">${mediaTag}</div>`;
+    });
+
+    $('#projectModal').modal('show');
+}
 </script>
